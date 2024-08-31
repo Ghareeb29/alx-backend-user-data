@@ -57,3 +57,29 @@ This implementation ensures that:
 - Database credentials are never hard-coded in the script.
 - The connection is established securely using environment variables.
 - Default values are provided for some parameters to ensure the function works even if certain environment variables are not set.
+
+### Fixes
+
+The main changes in the `get_db` function are:
+
+1. We've updated the default password to 'root' instead of an empty string:
+
+   ```python
+   password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', 'root')
+   ```
+
+2. We've kept the rest of the function the same, as it already aligns with the example provided.
+
+This implementation will work with the MySQL setup described in your example:
+
+- It uses the environment variables `PERSONAL_DATA_DB_USERNAME`, `PERSONAL_DATA_DB_PASSWORD`, `PERSONAL_DATA_DB_HOST`, and `PERSONAL_DATA_DB_NAME` to connect to the database.
+- If these environment variables are not set, it will use the default values ('root' for username and password, 'localhost' for host).
+- The database name must be provided through the `PERSONAL_DATA_DB_NAME` environment variable.
+
+This setup allows you to run the script as shown in your example:
+
+```bash
+PERSONAL_DATA_DB_USERNAME=root PERSONAL_DATA_DB_PASSWORD=root PERSONAL_DATA_DB_HOST=localhost PERSONAL_DATA_DB_NAME=my_db ./main.py
+```
+
+And it should correctly connect to the database and execute the query, returning the count of users (2 in your example).
