@@ -132,3 +132,35 @@ To use this function:
 3. You can then import and use the function as shown in your `main.py` example.
 
 Remember that you'll need to store the entire output of this function in your database, as it includes both the salt and the hashed password. When verifying a password later, you'll use `bcrypt.checkpw()` with the stored hash and the password to verify.
+
+## Task 6
+
+1. The function takes two arguments:
+   - `hashed_password`: A `bytes` object representing the stored hashed password.
+   - `password`: A `str` object representing the password to validate.
+2. The function is annotated to return a `bool`.
+3. Inside the function:
+   - We use `bcrypt.checkpw()` to compare the provided password with the hashed password.
+   - The provided password is encoded to UTF-8 before comparison.
+4. The function returns `True` if the password matches, and `False` otherwise.
+
+This implementation satisfies the requirements:
+
+- It uses `bcrypt` to validate the password.
+- It takes the correct argument types (`bytes` for hashed_password, `str` for password).
+- It returns a boolean.
+- The function is properly type-annotated.
+- It includes a descriptive docstring.
+
+To use these functions:
+
+1. Save this code in a file named `encrypt_password.py`.
+2. Make sure you have the `bcrypt` package installed. You can install it using pip:
+
+   ```bash
+   pip install bcrypt
+   ```
+
+3. You can then import and use the functions as shown in your `main.py` example.
+
+This implementation allows you to both hash passwords for storage and later validate passwords against the stored hashes, providing a complete solution for secure password handling.
