@@ -99,3 +99,36 @@ And it should correctly connect to the database and execute the query, returning
 9. Finally, we add an `if __name__ == "__main__":` block to ensure the `main()` function only runs when the script is executed directly.
 
 This implementation will retrieve all user data from the database and log it using the filtered format. The sensitive fields (name, email, phone, ssn, password) will be redacted as per the `RedactingFormatter` class.
+
+## Task 5
+
+Let's break down this implementation:
+
+1. We start with the correct shebang and a module-level docstring.
+2. We import the `bcrypt` package, which we'll use for hashing.
+3. We define the `hash_password` function, which takes a string `password` as input and returns a `bytes` object.
+4. Inside the function:
+   - We encode the password string to bytes using UTF-8 encoding.
+   - We use `bcrypt.gensalt()` to generate a random salt.
+   - We use `bcrypt.hashpw()` to hash the password with the generated salt.
+5. The function returns the salted, hashed password as a byte string.
+
+This implementation satisfies the requirements:
+
+- It uses `bcrypt.hashpw()` for hashing.
+- It returns a salted, hashed password as a byte string.
+- The function is properly type-annotated.
+- It includes a descriptive docstring.
+
+To use this function:
+
+1. Save this code in a file named `encrypt_password.py`.
+2. Make sure you have the `bcrypt` package installed. You can install it using pip:
+
+   ```bash
+   pip install bcrypt
+   ```
+
+3. You can then import and use the function as shown in your `main.py` example.
+
+Remember that you'll need to store the entire output of this function in your database, as it includes both the salt and the hashed password. When verifying a password later, you'll use `bcrypt.checkpw()` with the stored hash and the password to verify.
