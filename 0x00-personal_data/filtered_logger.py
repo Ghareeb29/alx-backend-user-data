@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-This module provides utilities for filtering and formatting log messages.
+This module provides utilities for filtering and formatting log messages,
+including functions to obfuscate sensitive information and a custom
+logging formatter.
 """
 
 import re
@@ -29,17 +31,37 @@ def filter_datum(
 
 
 class RedactingFormatter(logging.Formatter):
-    """Redacting Formatter class"""
+    """Redacting Formatter class
+
+    This formatter replaces sensitive information
+    in log messages with a redaction string.
+    """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
+        """
+        Initialize the RedactingFormatter with fields to redact.
+
+        Args:
+            fields: A list of strings representing the fields
+            to redact in log messages.
+        """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        """
+        Format the specified record as text.
+
+        Args:
+            record: A LogRecord instance representing the event being logged.
+
+        Returns:
+            A formatted string with sensitive information redacted.
+        """
         record.msg = filter_datum(
             self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR
         )
