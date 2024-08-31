@@ -82,4 +82,20 @@ This setup allows you to run the script as shown in your example:
 PERSONAL_DATA_DB_USERNAME=root PERSONAL_DATA_DB_PASSWORD=root PERSONAL_DATA_DB_HOST=localhost PERSONAL_DATA_DB_NAME=my_db ./main.py
 ```
 
-And it should correctly connect to the database and execute the query, returning the count of users (2 in your example).
+And it should correctly connect to the database and execute the query, returning the count of users .
+
+## Task 4
+
+1. We define the `main` function that takes no arguments and returns nothing.
+2. Inside `main`, we first get a database connection using `get_db()`.
+3. We create a cursor object to execute SQL queries.
+4. We execute a SELECT query to retrieve all rows from the `users` table.
+5. We get the field names from the cursor description.
+6. We create a logger using the `get_logger()` function defined earlier in the file.
+7. We iterate through each row returned by the query:
+   - For each row, we create a string that combines field names and values.
+   - We log this string using the logger, which will automatically apply the filtering.
+8. After processing all rows, we close the cursor and the database connection.
+9. Finally, we add an `if __name__ == "__main__":` block to ensure the `main()` function only runs when the script is executed directly.
+
+This implementation will retrieve all user data from the database and log it using the filtered format. The sensitive fields (name, email, phone, ssn, password) will be redacted as per the `RedactingFormatter` class.
