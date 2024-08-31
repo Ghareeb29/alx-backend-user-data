@@ -10,6 +10,10 @@ from typing import List
 import logging
 
 
+# PII fields to be redacted
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+
+
 def filter_datum(
     fields: List[str], redaction: str, message: str, separator: str
 ) -> str:
@@ -46,8 +50,8 @@ class RedactingFormatter(logging.Formatter):
         Initialize the RedactingFormatter with fields to redact.
 
         Args:
-            fields: A list of strings representing the fields
-            to redact in log messages.
+            fields: A list of strings representing the fields to redact
+            in log messages.
         """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
@@ -66,3 +70,22 @@ class RedactingFormatter(logging.Formatter):
             self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR
         )
         return super(RedactingFormatter, self).format(record)
+
+
+def get_logger() -> logging.Logger:
+    """
+    Creates and configures a logger for user data.
+
+    Returns:
+        A logging.Logger object configured to redact sensitive information.
+    """
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
+
+    logger.addHandler(stream_handler)
+
+    return logger
