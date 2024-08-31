@@ -36,3 +36,24 @@ Here's a breakdown of the changes:
 This implementation ensures that when you use the logger returned by `get_logger()`, it will automatically redact the sensitive information specified in `PII_FIELDS` from the log messages.
 
 The `PII_FIELDS` tuple includes five fields that are typically considered sensitive personal information: name, email, phone number, social security number (ssn), and password.
+
+## Task 3
+
+Let's break down the new `get_db` function:
+
+1. We import the necessary modules: `mysql.connector` for database connection and `os` for accessing environment variables.
+
+2. The `get_db` function is implemented:
+   - It retrieves database credentials from environment variables using `os.environ.get()`.
+   - Default values are set for username ('root'), password (empty string), and host ('localhost').
+   - The database name is retrieved from the `PERSONAL_DATA_DB_NAME` environment variable without a default value.
+   - It establishes a connection to the MySQL database using `mysql.connector.connect()`.
+   - The function is type-annotated to return a `mysql.connector.connection.MySQLConnection` object.
+
+3. The function uses the retrieved credentials to create and return a database connection.
+
+This implementation ensures that:
+
+- Database credentials are never hard-coded in the script.
+- The connection is established securely using environment variables.
+- Default values are provided for some parameters to ensure the function works even if certain environment variables are not set.

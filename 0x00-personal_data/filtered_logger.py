@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
 This module provides utilities for filtering and formatting log messages,
-including functions to obfuscate sensitive information and a custom
-logging formatter.
+including functions to obfuscate sensitive information, a custom
+logging formatter, and database connection functionality.
 """
 
 import re
 from typing import List
 import logging
+import mysql.connector
+import os
 
 
 # PII fields to be redacted
@@ -37,8 +39,8 @@ def filter_datum(
 class RedactingFormatter(logging.Formatter):
     """Redacting Formatter class
 
-    This formatter replaces sensitive information
-    in log messages with a redaction string.
+    This formatter replaces sensitive information in log messages
+    with a redaction string.
     """
 
     REDACTION = "***"
@@ -50,8 +52,8 @@ class RedactingFormatter(logging.Formatter):
         Initialize the RedactingFormatter with fields to redact.
 
         Args:
-            fields: A list of strings representing the fields to redact
-            in log messages.
+            fields: A list of strings representing the fields
+            to redact in log messages.
         """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
@@ -89,3 +91,23 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
 
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """
+    Connects to the MySQL database using credentials
+    from environment variables.
+
+    Returns:
+        A MySQLConnection object connected to the database.
+    """
+    username = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
+
+    connection = mysql.connector.connect(
+        user=username, password=password, host=host, database=db_name
+    )
+
+    return connection
