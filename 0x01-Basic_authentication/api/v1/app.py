@@ -20,7 +20,12 @@ if auth_type == "auth":
     auth = Auth()
 
 @app.before_request
-def before_request():
+def before_request() -> None:
+    """
+    Executes actions before processing each request.
+    Checks authentication status,
+    authorization header, and current user.
+    """
     if auth is None:
         return
     
