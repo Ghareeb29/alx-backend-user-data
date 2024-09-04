@@ -108,3 +108,37 @@ class BasicAuth(Auth):
                 return user
 
         return None
+
+    def current_user(self, request=None) -> TypeVar("User"):
+        """
+        Retrieves the current user based on the provided request.
+
+        Args:
+            request (object): The request object
+            containing the authorization header.
+
+        Returns:
+            TypeVar('User'): The current user object if the request is valid,
+            otherwise None.
+        """
+        if request is None:
+            return None
+
+        auth_header = self.authorization_header(request)
+        if auth_header is None:
+            return None
+
+        base64_auth = self.extract_base64_authorization_header(auth_header)
+        if base64_auth is None:
+            return None
+
+        decoded_auth = self.decode_base64_authorization_header(base64_auth)
+        if decoded_auth is None:
+            return None
+
+        user_credentials = self.extract_user_credentials(decoded_auth)
+        if user_credentials is None:
+            return None
+
+        user_email, user_pwd = user_credentials
+        return self.user_object_from_credentials(user_email, user_pwd)
