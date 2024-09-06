@@ -4,7 +4,6 @@
 from api.v1.auth.auth import Auth
 import uuid
 import os
-from flask import request
 
 
 class SessionAuth(Auth):
@@ -56,4 +55,5 @@ class SessionAuth(Auth):
         """Returns the session ID from a cookie"""
         if request is None:
             return None
-        return request.cookies.get(os.getenv("SESSION_NAME"))
+        session_name = os.getenv("SESSION_NAME")
+        return request.cookies.get(session_name)
