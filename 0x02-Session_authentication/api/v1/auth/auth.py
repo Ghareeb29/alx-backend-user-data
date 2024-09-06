@@ -32,13 +32,13 @@ class Auth:
             return None
         return request.headers["Authorization"]
 
-    def current_user(self, request=None) -> TypeVar("User"): # type: ignore
+    def current_user(self, request=None) -> TypeVar("User"):  # type: ignore
         """current_user"""
         return None
-    
+
     def session_cookie(self, request=None) -> str:
         """Returns the session ID from a cookie"""
         if request is None:
             return None
-        session_id = os.getenv('SESSION_NAME')
+        session_id = os.getenv("SESSION_NAME")
         return request.cookies.get(session_id)
