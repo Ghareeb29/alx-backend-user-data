@@ -5,7 +5,6 @@ from api.v1.auth.auth import Auth
 import uuid
 import os
 
-
 class SessionAuth(Auth):
     """Session Auth class"""
 
@@ -50,10 +49,4 @@ class SessionAuth(Auth):
             return None
         else:
             return self.user_id_by_session_id.get(session_id)
-
-    def session_cookie_id(self, request=None) -> str:
-        """Returns the session ID from a cookie"""
-        if request is None:
-            return None
-        session_name = os.getenv("SESSION_NAME")
-        return request.cookies.get(session_name)
+        
