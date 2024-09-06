@@ -48,7 +48,10 @@ def before_request() -> None:
     if not auth.require_auth(request.path, excluded_paths):
         return
 
-    if auth.authorization_header(request) is None:
+    if (
+        auth.authorization_header(request) is None
+        and auth.session_cookie(request) is None
+    ):
         abort(401)
 
     if auth.current_user(request) is None:
@@ -57,12 +60,6 @@ def before_request() -> None:
     request.current_user = auth.current_user(request)
     if request.current_user is None:
         abort(403)
-
-    if (
-        auth.authorization_header(request) is None
-        or auth.session_cookie(request) is None
-    ):
-        abort(401)
 
 
 @app.errorhandler(404)
