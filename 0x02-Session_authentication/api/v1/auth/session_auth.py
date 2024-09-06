@@ -3,6 +3,8 @@
 
 from api.v1.auth.auth import Auth
 import uuid
+import os
+from flask import request
 
 
 class SessionAuth(Auth):
@@ -49,3 +51,9 @@ class SessionAuth(Auth):
             return None
         else:
             return self.user_id_by_session_id.get(session_id)
+
+    def session_cookie_id(self, request=None) -> str:
+        """Returns the session ID from a cookie"""
+        if request is None:
+            return None
+        return request.cookies.get(os.getenv("SESSION_NAME"))
