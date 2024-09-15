@@ -33,3 +33,17 @@ If an invalid attribute is passed, it raises a ValueError.
 After updating all valid attributes, it commits the changes to the database.
 If the user is not found, it raises a ValueError.
 If there's an InvalidRequestError, it rolls back the session and raises a ValueError.
+
+## Task 4
+
+This implementation does the following:
+
+We import the bcrypt module, which we'll use for hashing the password.
+We define the _hash_password function that takes a password string as input and returns bytes.
+Inside the function:
+
+We convert the input password string to bytes using encode('utf-8').
+We generate a salt using bcrypt.gensalt().
+We hash the password using bcrypt.hashpw(), which takes the password bytes and the salt as arguments.
+
+Finally, we return the hashed password, which is in bytes format.
