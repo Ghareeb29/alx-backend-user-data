@@ -5,6 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
+
 from user import Base, User
 
 
@@ -27,8 +30,27 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Adds a new user to the database"""
-        new_user = User(email=email, hashed_password=hashed_password)
-        self._session.add(new_user)
-        self._session.commit()
-        return new_user
+        """
+        Add a new user to the database.
+
+        Args:
+            email (str): The email of the user.
+            hashed_password (str): The hashed password of the user.
+
+        Returns:
+            User: The newly created User object.
+
+        Raises:
+            ValueError: If a user with the given email already exists.
+        """
+        try:
+            new_user = User(email=email, hashed_password=hashed_password)
+            self._session.add(new_user)
+            self._session.commit()
+            return new_user
+        except InvalidRequestError:
+            self._session.rollback()
+            raise
+        except Exception as e:
+            self._session.rollback()
+            raise ValueError(f"Error adding user: {str(e)}")
