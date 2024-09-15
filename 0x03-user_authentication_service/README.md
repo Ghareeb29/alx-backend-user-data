@@ -47,3 +47,18 @@ We generate a salt using bcrypt.gensalt().
 We hash the password using bcrypt.hashpw(), which takes the password bytes and the salt as arguments.
 
 Finally, we return the hashed password, which is in bytes format.
+
+## Task 5
+
+This implementation does the following:
+
+We keep the _hash_password function as previously implemented.
+In the Auth class:
+
+We implement the register_user method that takes email and password as mandatory arguments.
+We first try to find a user with the given email using self._db.find_user_by().
+If a user is found (i.e., no exception is raised), we raise a ValueError with the message "User <user's email> already exists".
+If NoResultFound is raised (meaning the user doesn't exist), we catch this exception and proceed to create the new user.
+We hash the password using the _hash_password function.
+We use self._db.add_user() to save the new user to the database.
+Finally, we return the newly created User object.
