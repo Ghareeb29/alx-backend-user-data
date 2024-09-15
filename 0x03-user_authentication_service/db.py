@@ -54,3 +54,25 @@ class DB:
         except Exception as e:
             self._session.rollback()
             raise ValueError(f"Error adding user: {str(e)}")
+
+    def find_user_by(self, **kwargs) -> User:
+        """
+        Find a user in the database by the given keyword arguments.
+
+        Args:
+            **kwargs: The keyword arguments to search for.
+
+        Returns:
+            User: The first user that matches the given keyword arguments.
+
+        Raises:
+            NoResultFound: If no results are found.
+            InvalidRequestError: If invalid query arguments are passed.
+        """
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+            return user
+        except InvalidRequestError:
+            raise
