@@ -47,13 +47,13 @@ class DB:
             new_user = User(email=email, hashed_password=hashed_password)
             self._session.add(new_user)
             self._session.commit()
-            return new_user
         except InvalidRequestError:
             self._session.rollback()
             raise
         except Exception as e:
             self._session.rollback()
             raise ValueError(f"Error adding user: {str(e)}")
+        return new_user
 
     def find_user_by(self, **kwargs) -> User:
         """
@@ -73,6 +73,6 @@ class DB:
             user = self._session.query(User).filter_by(**kwargs).first()
             if user is None:
                 raise NoResultFound
-            return user
         except InvalidRequestError:
             raise
+        return user
