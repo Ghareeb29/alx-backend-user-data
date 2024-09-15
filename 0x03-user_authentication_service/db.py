@@ -52,7 +52,7 @@ class DB:
             raise
         except Exception as e:
             self._session.rollback()
-            raise ValueError(f"Error adding user: {str(e)}")
+            raise
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
