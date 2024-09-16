@@ -83,5 +83,49 @@ class Auth:
         """
         return str(uuid.uuid4())
 
+    def create_session(self, email: str) -> str:
+        """
+        Create a session for a user.
+
+        Args:
+            email (str): The email of the user.
+
+        Returns:
+            str: The session ID.
+        """
+        user = self._db.find_user_by(email=email)
+        session_id = self._generate_uuid()
+        self._db.update_user(user.id, session_id=session_id)
+        return session_id
+
+    def get_user_from_session_id(self, session_id: str) -> User:
+        """
+        Get a user from a session ID.
+
+        Args:
+            session_id (str): The session ID to get the user from.
+
+        Returns:
+            User: The user object associated with the session ID.
+        """
+        if session_id is None:
+            return None
+        else:
+            user = self._db.find_user_by(session_id=session_id)
+            return user
+
+    def destroy_session(self, user_id: int) -> None:
+        """
+        Destroy a session for a user.
+
+        Args:
+            user_id (int): The ID of the user.
+
+        Returns:
+            None
+        """
+        self._db.update_user(user_id, session_id=None)
+        return None
+
     def __init__(self):
         self._db = DB()
