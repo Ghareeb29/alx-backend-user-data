@@ -2,6 +2,7 @@
 """
 Authentication module
 """
+import uuid
 import bcrypt
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
@@ -72,6 +73,15 @@ class Auth:
                                   user.hashed_password)
         except NoResultFound:
             return False
+
+    def _generate_uuid(self) -> str:
+        """
+        Generate a UUID.
+
+        Returns:
+            str: The generated UUID.
+        """
+        return str(uuid.uuid4())
 
     def __init__(self):
         self._db = DB()
