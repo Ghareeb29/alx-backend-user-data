@@ -84,19 +84,13 @@ class Auth:
         return str(uuid.uuid4())
 
     def create_session(self, email: str) -> str:
-        """
-        Create a session for a user.
-
-        Args:
-            email (str): The email of the user.
-
-        Returns:
-            str: The session ID.
-        """
+        """Create session for user"""
         user = self._db.find_user_by(email=email)
-        session_id = self._generate_uuid()
-        self._db.update_user(user.id, session_id=session_id)
-        return session_id
+        if user:
+            session_id = self._generate_uuid()
+            self._db.update_user(user.id, session_id=session_id)
+            return session_id
+        return None
 
     def get_user_from_session_id(self, session_id: str) -> User:
         """
