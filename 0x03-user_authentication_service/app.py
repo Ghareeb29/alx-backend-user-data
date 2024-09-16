@@ -11,7 +11,7 @@ AUTH = Auth()
 
 
 @app.route("/")
-def welcome():
+def welcome() -> str:
     """
     Defines a route for the root URL ("/") of the Flask application.
 
@@ -22,7 +22,7 @@ def welcome():
 
 
 @app.route("/users", methods=["POST"])
-def users():
+def users() -> str:
     """POST /users
     JSON body:
       - email
